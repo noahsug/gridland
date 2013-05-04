@@ -7,14 +7,14 @@ describe 'Util functions:', ->
       shuffled = [0..19]
       util.shuffle shuffled
       diff = (ele for ele, i in shuffled when ele isnt i)
-      expect(diff.length > 0).toBe true
+      expect(diff.length).toBeGreaterThan 0
 
     it 'keeps the elements of the original array', ->
       original = [1, 2, 3, 4, 5, 'c', 'e', 'f']
       shuffled = util.shuffle original[..]
       expect(shuffled.length).toBe original.length
       for i in original
-        expect(shuffled.indexOf(i) isnt -1).toBe true
+        expect(shuffled).toContain i
 
     it 'does nothing to an array of size < 2', ->
       arr = util.shuffle [1]
@@ -25,8 +25,8 @@ describe 'Util functions:', ->
 
   describe 'randInt', ->
     it 'returns an int in range [min, max]', ->
-      min = 3
-      max = 9
+      min = 13
+      max = 17
       for i in [1..20]
         expect(min <= util.randInt(min, max) <= max).toBe true
 
@@ -39,3 +39,8 @@ describe 'Util functions:', ->
         wasMin or= result is min
         wasMax or= result is max
       expect(wasMin and wasMax).toBe true
+
+    it 'defaults min to 0', ->
+      max = 8
+      for i in [1..20]
+        expect(0 <= util.randInt(max) <= max).toBe true

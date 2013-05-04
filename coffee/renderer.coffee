@@ -1,21 +1,10 @@
 class Renderer
-  constructor: ->
+  constructor: (@game_) ->
+    @world_ = @game_.getWorld()
+    @game_.on 'world_updated', (actions) => @renderWorld_ actions
 
-  setWorld: (@world_) ->
+  renderWorld_: (actions) ->
 
-  listenForEvents: (game) ->
-    game.on 'entity_added', @onEntityAdded_
-    game.on 'entity_removed', @onEntityRemoved_
-    game.on 'actions', @renderActions_
-
-  onEntityRemoved_: (entity) =>
-
-
-  onEntityAdded_: (entity) =>
-
-
-  renderActions_: (actions) =>
-
-  draw: ->
+  beginRendering: ->
 
 exports.Renderer = Renderer

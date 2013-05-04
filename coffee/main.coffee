@@ -1,6 +1,9 @@
 World = require('../coffee/world.coffee').World
 Game = require('../coffee/game.coffee').Game
+Entity = require('../coffee/entity.coffee').Entity
+RandomMovementBehavior = require('../coffee/random_movement_behavior.coffee').RandomMovementBehavior
 AsciiRenderer = require('../coffee/ascii_renderer.coffee').AsciiRenderer
+util = require('../coffee/util.coffee').util
 
 class Main
   run: ->
@@ -8,15 +11,30 @@ class Main
     @runGameLoop_()
 
   init_: ->
-    world = new World(3, 3)
+    @world_ = new World 3, 3
+    @game_ = new Game @world_
+    renderer = new AsciiRenderer @game_
+    renderer.beginRendering()
 
-    game = new Game(world)
+  runGameLoop_: (count=1) ->
+    setTimeout =>
+      if count % 2 is 1
+        entity = new Entity
+        entity.setBehavior new RandomMovementBehavior()
+        entity.setPos @getRandomPosition_()
+        entity.setType Entity.Type.Marine
+        @game_.addEntity entity
+      @game_.update()
+      if count < 6
+        @runGameLoop_ count + 1
+    , 1000
 
-    renderer = new AsciiRenderer
-    renderer.setWorld world
-    renderer.listenForEvents game
-    renderer.draw()
-
-  runGameLoop_: ->
+  getRandomPosition_: ->
+    {
+      x: util.randInt(@world_.getWidth() - 1),
+      y: util.randInt(@world_.getHeight() - 1)
+    }
 
 exports.Main = Main
+
+new Main().run()

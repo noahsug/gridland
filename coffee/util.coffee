@@ -11,7 +11,9 @@ class Util
     [arr[index2], arr[index1]] = [arr[index1], arr[index2]]
 
   # Return an integer in the range [min, max]
-  randInt: (min=0, max) ->
+  randInt: (min, max) ->
+    if arguments.length is 1
+      [min, max] = [0, min]
     throw "min must be <= max, but #{min} > #{max}" if min > max
     Math.floor(Math.random() * (max + 1 - min) + min)
 

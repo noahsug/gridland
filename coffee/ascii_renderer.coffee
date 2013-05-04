@@ -2,10 +2,14 @@ Renderer = require('../coffee/renderer.coffee').Renderer
 Entity = require('../coffee/entity.coffee').Entity
 
 class AsciiRenderer extends Renderer
-  constructor: ->
-    super
 
-  draw: ->
+  renderWorld_: ->
+    @draw_()
+
+  beginRendering: ->
+    @draw_()
+
+  draw_: ->
     @print_ ''
     for y in [0..@world_.getHeight() - 1]
       row = []

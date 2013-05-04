@@ -22,26 +22,33 @@ describe "A World", ->
     world.set({x: 9, y: 3}, 1)
     expect(world.get x: 9, y: 3).toBe 1
 
+  it "can tell if a position is in the world", ->
+    expect(world.isInWorld x: 0, y: 0).toBe true
+    expect(world.isInWorld x: 10, y: 10).toBe false
+    expect(world.isInWorld x: -1, y: -1).toBe false
+    expect(world.isInWorld x: 2, y: 6).toBe true
+    expect(world.isInWorld x: -1, y: 9).toBe false
+
   it "can add an entity", ->
     entity = new Entity()
-    entity.setPos 0, 5
+    entity.setPos x: 0, y: 5
     world.add entity
     expect(world.get x: 0, y: 5).toBe entity
 
   it "can remove an entity", ->
     entity = new Entity()
-    entity.setPos 0, 5
+    entity.setPos x: 0, y: 5
     world.add entity
     world.remove entity
     expect(world.isEmpty x: 0, y: 5).toBe true
 
   it "doesn't remove an entity when another entity has taken its spot", ->
     entity = new Entity()
-    entity.setPos 0, 5
+    entity.setPos x: 0, y: 5
     world.add entity
 
     newEntity = new Entity()
-    newEntity.setPos 0, 5
+    newEntity.setPos x: 0, y: 5
     world.add newEntity
 
     world.remove entity

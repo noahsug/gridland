@@ -11,7 +11,7 @@ class Entity
     @behavior_ = new Behavior
     @pos_ = {x: -1, y: -1}
     @active_ = true
-    @type_ = Entity.Type.Empty
+    @setType Entity.Type.Empty
 
   setType: (@type_) ->
 
@@ -19,10 +19,11 @@ class Entity
     @type_
 
   setBehavior: (@behavior_) ->
+    @behavior_.setEntity this
 
-  setPos: (x, y) ->
-    @pos_.x = x
-    @pos_.y = y
+  setPos: (pos) ->
+    @pos_.x = pos.x
+    @pos_.y = pos.y
 
   getPos: ->
     @pos_

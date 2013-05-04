@@ -6,16 +6,12 @@ Entity = require('../coffee/entity.coffee').Entity
 
 describe 'Ascii renderer', ->
 
-  renderer = game = output = undefined
+  renderer = game = output = entity = undefined
 
   initRenderer = ->
     world = new World(3, 3)
-
     game = new Game(world)
-
-    renderer = new AsciiRenderer
-    renderer.setWorld world
-    renderer.listenForEvents game
+    renderer = new AsciiRenderer game
 
   getOutput = ->
     "
@@ -31,9 +27,15 @@ describe 'Ascii renderer', ->
   beforeEach ->
     initRenderer()
     spyOn(renderer, 'print_').andCallFake onOutput
+    renderer.beginRendering()
+
+  addEntity = ->
+    entity = new Entity()
+    entity.setType Entity.Type.Marine
+    entity.setPos x: 0, y: 0
+    game.addEntity entity
 
   it 'outputs a blank 3x3 grid on first draw', ->
-    renderer.draw()
     expect(getOutput()).toBe '
     - - -
     - - -
@@ -41,12 +43,8 @@ describe 'Ascii renderer', ->
     '
 
   it 'can draw an entity when one is added to the game', ->
-    entity = new Entity()
-    entity.setType Entity.Type.Marine
-    entity.setPos 0, 0
-    game.addEntity entity
-
-    renderer.draw()
+    addEntity()
+    game.update()
     expect(getOutput()).toBe '
     M - -
     - - -
@@ -54,14 +52,9 @@ describe 'Ascii renderer', ->
     '
 
   it "redraws entities that haven't moved", ->
-    entity = new Entity()
-    entity.setType Entity.Type.Marine
-    entity.setPos 0, 0
-    game.addEntity entity
-
-    renderer.draw()
+    addEntity()
     game.update()
-    renderer.draw()
+    game.update()
     expect(getOutput()).toBe '
     M - -
     - - -
@@ -69,15 +62,9 @@ describe 'Ascii renderer', ->
     '
 
   it "doesn't draw inactive entities", ->
-    entity = new Entity()
-    entity.setType Entity.Type.Marine
-    entity.setPos 0, 0
-    game.addEntity entity
-
-    renderer.draw()
+    addEntity()
     entity.deactivate()
     game.update()
-    renderer.draw()
     expect(getOutput()).toBe '
     - - -
     - - -

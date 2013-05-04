@@ -1,8 +1,6 @@
 class Knowledge
-  constructor: ->
+  constructor: (@world, @entities)->
 
-  setWorld: (@world_) ->
-
-  setEntities: (@entities_) ->
+  updateEntities: (@entities) ->
 
 exports.Knowledge = Knowledge

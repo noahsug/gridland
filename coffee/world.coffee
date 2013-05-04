@@ -22,6 +22,9 @@ class World
   isEmpty: (pos) ->
     @get(pos).getType() is Entity.Type.Empty
 
+  isInWorld: (pos) ->
+    return (0 <= pos.x < @width_) and (0 <= pos.y < @height_)
+
   add: (entity) ->
     @set entity.getPos(), entity
 

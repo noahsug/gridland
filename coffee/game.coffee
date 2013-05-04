@@ -3,14 +3,10 @@ util = require('../coffee/util.coffee').util
 EventEmitter = require('../coffee/event_emitter.coffee').EventEmitter
 
 class Game extends EventEmitter
-  constructor: (world) ->
+  constructor: (@world_) ->
     super
     @entities_ = []
-    @entityKnowledge_ = new Knowledge
-    @setWorld_ world
-
-  setWorld_: (@world_) ->
-    @entityKnowledge_.setWorld @world_
+    @entityKnowledge_ = new Knowledge @world_, @entities_
 
   getWorld: ->
     @world_
@@ -19,23 +15,21 @@ class Game extends EventEmitter
     @entities_.push entity
     entity.setKnowledge(@entityKnowledge_)
     @world_.add entity
-    @emit 'entity_added', entity
 
   update: ->
     @performEntityActions_()
     @removeInactiveEntities_()
+    @emit 'world_updated', @actions_
 
   performEntityActions_: ->
-    actions = (entity.getAction() for entity in @entities_)
-    for action in util.shuffle actions
+    @actions_ = (entity.getAction() for entity in @entities_)
+    for action in util.shuffle @actions_
       action.actOn @world_
-    @emit 'actions', actions
 
   removeInactiveEntities_: ->
     for entity in @entities_ when not entity.isActive()
       @world_.remove entity
-      @emit 'entity_removed', entity
     @entities_ = (entity for entity in @entities_ when entity.isActive())
-    @entityKnowledge_.setEntities @entities_
+    @entityKnowledge_.updateEntities @entities_
 
 exports.Game = Game
