@@ -34,7 +34,7 @@ describe 'Util functions:', ->
       min = 9
       max = 12
       wasMin = wasMax = false
-      for i in [1..20]
+      for i in [1..40]
         result = util.randInt(min, max)
         wasMin or= result is min
         wasMax or= result is max

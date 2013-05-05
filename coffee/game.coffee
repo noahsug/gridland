@@ -1,5 +1,5 @@
-Knowledge = require('../coffee/knowledge.coffee').Knowledge
 util = require('../coffee/util.coffee').util
+Knowledge = require('../coffee/knowledge.coffee').Knowledge
 EventEmitter = require('../coffee/event_emitter.coffee').EventEmitter
 
 class Game extends EventEmitter

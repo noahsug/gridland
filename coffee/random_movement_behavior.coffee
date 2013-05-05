@@ -1,7 +1,7 @@
 Behavior = require('../coffee/behavior.coffee').Behavior
 MoveAction = require('../coffee/move_action.coffee').MoveAction
-util = require('../coffee/util.coffee').util
 Position = require('../coffee/position.coffee').Position
+util = require('../coffee/util.coffee').util
 
 class RandomMovementBehavior extends Behavior
 
