@@ -11,6 +11,9 @@ class Game extends EventEmitter
   getWorld: ->
     @world_
 
+  canAddEntityAt: (pos) ->
+    return @world_.isInWorld(pos) and @world_.isEmpty(pos)
+
   addEntity: (entity) ->
     @entities_.push entity
     entity.setKnowledge(@entityKnowledge_)

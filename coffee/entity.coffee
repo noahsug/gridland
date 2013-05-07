@@ -5,7 +5,8 @@ class Entity
 
   @Type =
     Empty: 0,
-    Marine: 1
+    Marine: 1,
+    Wolf: 2
 
   constructor: ->
     @behavior_ = new Behavior

@@ -1,6 +1,6 @@
-# A version of gridworld that render's to console.log.
+# A version of gridworld that renders to console.log.
 
-AsciiRenderer = require('../coffee/ascii_renderer.coffee').AsciiRenderer
+ConsoleRenderer = require('../coffee/console_renderer.coffee').ConsoleRenderer
 Entity = require('../coffee/entity.coffee').Entity
 Game = require('../coffee/game.coffee').Game
 RandomMovementBehavior = require('../coffee/random_movement_behavior.coffee').RandomMovementBehavior
@@ -15,7 +15,7 @@ class Main
   init_: ->
     @world_ = new World 3, 3
     @game_ = new Game @world_
-    renderer = new AsciiRenderer @game_
+    renderer = new ConsoleRenderer @game_
     renderer.beginRendering()
 
   runGameLoop_: (count=1) ->

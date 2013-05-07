@@ -1,9 +1,10 @@
 class Renderer
-  constructor: (@game_) ->
-    @world_ = @game_.getWorld()
-    @game_.on 'world_updated', (actions) => @renderWorld_ actions
+  constructor: (@world_) ->
 
-  renderWorld_: (actions) ->
+  listenToGameEvents: (game) ->
+    game.on 'world_updated', (actions) => @onWorldUpdated_ actions
+
+  onWorldUpdated_: (actions) ->
 
   beginRendering: ->
 

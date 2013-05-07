@@ -1,15 +1,15 @@
 Renderer = require('../coffee/renderer.coffee').Renderer
 Entity = require('../coffee/entity.coffee').Entity
 
-class AsciiRenderer extends Renderer
-
-  renderWorld_: ->
-    @draw_()
+class ConsoleRenderer extends Renderer
 
   beginRendering: ->
-    @draw_()
+    @draw()
 
-  draw_: ->
+  onWorldUpdated_: ->
+    @draw()
+
+  draw: ->
     @print_ ''
     for y in [0..@world_.getHeight() - 1]
       row = []
@@ -23,6 +23,8 @@ class AsciiRenderer extends Renderer
   drawEntity_: (entity) ->
     switch entity.getType()
       when Entity.Type.Marine then 'M'
-      else '-'
+      when Entity.Type.Wolf then 'W'
+      when Entity.Type.Empty then '-'
+      else '?'
 
-exports.AsciiRenderer = AsciiRenderer
+exports.ConsoleRenderer = ConsoleRenderer

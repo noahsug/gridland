@@ -1,44 +1,41 @@
-class Main extends atom.Game
+class Main
+
+  @UPDATE_TIME = 1 # in seconds
+
   constructor: ->
-    super
+    @elapsed_ = 0
+    @updateCount_ = 0
     @init_()
-    @runGameLoop_()
-
-  update: (dt) ->
-
-  draw: ->
-    @drawBackground_()
-    @drawPlayer_()
-
-  drawBackground_: ->
-    atom.context.fillStyle = '#202020'
-    atom.context.fillRect 0, 0, atom.width, atom.height
-
-  drawPlayer_: ->
-    atom.context.beginPath()
-    atom.context.arc atom.width/2, atom.height/2, 15, 0, 2 * Math.PI, false
-    atom.context.lineWidth = 5
-    atom.context.strokeStyle = 'orange'
-    atom.context.stroke()
 
   init_: ->
-    @world_ = new World 3, 3
+    @world_ = new World 9, 9
     @game_ = new Game @world_
-    renderer = new AsciiRenderer @game_
+    canvas = new Canvas()
+
+    renderer = new HTML5Renderer canvas, @world_
+    renderer.listenToGameEvents @game_
     renderer.beginRendering()
 
-  runGameLoop_: (count=1) ->
-    setTimeout =>
-      if count % 2 is 1
-        entity = new Entity
-        entity.setBehavior new RandomMovementBehavior()
-        entity.setPos @getRandomPosition_()
-        entity.setType Entity.Type.Marine
-        @game_.addEntity entity
+    player = new Player renderer.getInput()
+    player.play @game_
+
+    canvas.on 'update', (dt) => @update_ dt
+
+  update_: (dt) ->
+    @elapsed_ += dt
+    if @elapsed_ >= Main.UPDATE_TIME
+      @updateCount_++
+      if @updateCount_ < 10 and @updateCount_ % 2 is 1
+        @addEntity_()
+      @elapsed_ -= Main.UPDATE_TIME
       @game_.update()
-      if count < 6
-        @runGameLoop_ count + 1
-    , 1000
+
+  addEntity_: ->
+    entity = new Entity
+    entity.setBehavior new RandomMovementBehavior()
+    entity.setPos @getRandomPosition_()
+    entity.setType Entity.Type.Wolf
+    @game_.addEntity entity
 
   getRandomPosition_: ->
     {
@@ -46,8 +43,4 @@ class Main extends atom.Game
       y: util.randInt(@world_.getHeight() - 1)
     }
 
-
 main = new Main()
-$('window').on 'blur', main.stop()
-$('window').on 'focus', main.run()
-main.run()

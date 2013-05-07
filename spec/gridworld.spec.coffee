@@ -1,17 +1,27 @@
 MoveAction = require('../coffee/move_action.coffee').MoveAction
 World = require('../coffee/world.coffee').World
 Game = require('../coffee/game.coffee').Game
-AsciiRenderer = require('../coffee/ascii_renderer.coffee').AsciiRenderer
+ConsoleRenderer = require('../coffee/console_renderer.coffee').ConsoleRenderer
 Entity = require('../coffee/entity.coffee').Entity
+Player = require('../coffee/player.coffee').Player
+Input = require('../coffee/input.coffee').Input
 
-describe 'Ascii renderer', ->
+describe 'Gridworld', ->
+  renderer = input = game = output = entity = undefined
 
-  renderer = game = output = entity = undefined
+  init = ->
+    world = new World 3, 3
+    game = new Game world
 
-  initRenderer = ->
-    world = new World(3, 3)
-    game = new Game(world)
-    renderer = new AsciiRenderer game
+    renderer = new ConsoleRenderer world
+    renderer.listenToGameEvents game
+
+    input = new Input
+    player = new Player input
+    player.play game
+
+  click = (x, y) ->
+    input.addEntity_ { x, y }
 
   getOutput = ->
     "
@@ -25,13 +35,13 @@ describe 'Ascii renderer', ->
       output.push line
 
   beforeEach ->
-    initRenderer()
+    init()
     spyOn(renderer, 'print_').andCallFake onOutput
     renderer.beginRendering()
 
   addEntity = ->
     entity = new Entity()
-    entity.setType Entity.Type.Marine
+    entity.setType Entity.Type.Wolf
     entity.setPos x: 0, y: 0
     game.addEntity entity
 
@@ -46,7 +56,7 @@ describe 'Ascii renderer', ->
     addEntity()
     game.update()
     expect(getOutput()).toBe '
-    M - -
+    W - -
     - - -
     - - -
     '
@@ -56,7 +66,7 @@ describe 'Ascii renderer', ->
     game.update()
     game.update()
     expect(getOutput()).toBe '
-    M - -
+    W - -
     - - -
     - - -
     '
@@ -67,6 +77,36 @@ describe 'Ascii renderer', ->
     game.update()
     expect(getOutput()).toBe '
     - - -
+    - - -
+    - - -
+    '
+
+  it "adds an entity through input", ->
+    click 0, 0
+    renderer.draw()
+    expect(getOutput()).toBe '
+    M - -
+    - - -
+    - - -
+    '
+
+  it "can add multiple entities through input", ->
+    for x in [0..2]
+      for y in [0..2]
+        click x, y
+    renderer.draw()
+    expect(getOutput()).toBe '
+    M M M
+    M M M
+    M M M
+    '
+
+  it "doesn't add an entity through input when the pos is taken", ->
+    addEntity()
+    click 0, 0
+    renderer.draw()
+    expect(getOutput()).toBe '
+    W - -
     - - -
     - - -
     '
