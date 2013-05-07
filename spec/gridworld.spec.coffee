@@ -12,6 +12,7 @@ describe 'Gridworld', ->
   init = ->
     world = new World 3, 3
     game = new Game world
+    game.setMoney 100
     renderer = new ConsoleRenderer game
 
     input = new Input
@@ -105,6 +106,16 @@ describe 'Gridworld', ->
     renderer.draw()
     expect(getOutput()).toBe '
     W - -
+    - - -
+    - - -
+    '
+
+  it "doesn't add an entity when there are insufficient funds", ->
+    game.setMoney 0
+    click 0, 0
+    renderer.draw()
+    expect(getOutput()).toBe '
+    - - -
     - - -
     - - -
     '

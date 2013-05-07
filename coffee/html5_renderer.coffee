@@ -37,13 +37,13 @@ class HTML5Renderer extends Renderer
     idealBlockHeight = @canvas_.getHeight() /
         (@world_.getHeight() + HTML5Renderer.MONEY_UI_HEIGHT)
     @blockSize_ = Math.min idealBlockWidth, idealBlockHeight
+    @gridWidth_ = @blockSize_ * @world_.getWidth()
+    @gridHeight_ = @blockSize_ * @world_.getHeight()
     @input_.setBlockSize @blockSize_
 
   calculateGridPos_: ->
-    @gridX_ = ( @canvas_.getWidth() -
-        @blockSize_ * @world_.getWidth() ) / 2
-    @gridY_ = ( @canvas_.getHeight() - @blockSize_ * @world_.getHeight() +
-        @moneyUIHeight_ ) / 2
+    @gridX_ = ( @canvas_.getWidth() - @gridWidth_ ) / 2
+    @gridY_ = ( @canvas_.getHeight() - @gridHeight_ + @moneyUIHeight_ ) / 2
     @input_.setGridPos x: @gridX_, y: @gridY_
 
   beginRendering: ->
@@ -89,6 +89,7 @@ class HTML5Renderer extends Renderer
     y = @moneyBuffer_
     for i in [0..@game_.getMoney() - 1]
       x = @gridX_ + i * (@moneySize_ + @moneyPadding_)
+      return if x + @moneySize_ > @gridX_ + @gridWidth_
       @canvas_.getContext().fillStyle = '#404040'
       @canvas_.getContext().fillRect x, y, @moneySize_, @moneySize_
 

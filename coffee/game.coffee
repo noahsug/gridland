@@ -8,7 +8,7 @@ class Game extends EventEmitter
     @entities_ = []
     @entityKnowledge_ = new Knowledge @world_, @entities_
     @money_ = 0
-    @income_ = .5
+    @income_ = 1
 
   setMoney: (@money_) ->
 
