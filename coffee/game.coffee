@@ -7,14 +7,25 @@ class Game extends EventEmitter
     super
     @entities_ = []
     @entityKnowledge_ = new Knowledge @world_, @entities_
+    @money_ = 0
+    @income_ = .5
+
+  setMoney: (@money_) ->
+
+  getMoney: ->
+    Math.floor @money_
+
+  setIncome: (@income_) ->
 
   getWorld: ->
     @world_
 
-  canAddEntityAt: (pos) ->
+  canAddEntityAt: (pos, cost) ->
+    return false if @money_ < cost
     return @world_.isInWorld(pos) and @world_.isEmpty(pos)
 
   addEntity: (entity) ->
+    @money_ -= entity.getCost()
     @entities_.push entity
     entity.setKnowledge(@entityKnowledge_)
     @world_.add entity
@@ -22,6 +33,7 @@ class Game extends EventEmitter
   update: ->
     @performEntityActions_()
     @removeInactiveEntities_()
+    @money_ += @income_
     @emit 'world_updated', @actions_
 
   performEntityActions_: ->

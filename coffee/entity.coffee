@@ -12,7 +12,13 @@ class Entity
     @behavior_ = new Behavior
     @pos_ = {x: -1, y: -1}
     @active_ = true
-    @setType Entity.Type.Empty
+    @type_ = Entity.Type.Empty
+    @cost_ = 0
+
+  getCost: ->
+    @cost_
+
+  setCost: (@cost_) ->
 
   setType: (@type_) ->
 

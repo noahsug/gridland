@@ -8,11 +8,12 @@ class Player
   play: (@game_) ->
 
   addEntity_: (pos) ->
-    return unless @game_.canAddEntityAt pos
+    return unless @game_.canAddEntityAt pos, 1
     entity = new Entity()
     entity.setPos pos
     entity.setType Entity.Type.Marine
     entity.setBehavior new RandomMovementBehavior()
+    entity.setCost 1
     @game_.addEntity entity
 
 exports.Player = Player

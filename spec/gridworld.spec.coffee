@@ -12,9 +12,7 @@ describe 'Gridworld', ->
   init = ->
     world = new World 3, 3
     game = new Game world
-
-    renderer = new ConsoleRenderer world
-    renderer.listenToGameEvents game
+    renderer = new ConsoleRenderer game
 
     input = new Input
     player = new Player input

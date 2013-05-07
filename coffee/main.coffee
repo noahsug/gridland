@@ -12,8 +12,7 @@ class Main
     @game_ = new Game @world_
     canvas = new Canvas()
 
-    renderer = new HTML5Renderer canvas, @world_
-    renderer.listenToGameEvents @game_
+    renderer = new HTML5Renderer canvas, @game_
     renderer.beginRendering()
 
     player = new Player renderer.getInput()

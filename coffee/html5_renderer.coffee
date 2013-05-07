@@ -1,9 +1,13 @@
 class HTML5Renderer extends Renderer
 
-  @GRID_LINE_WIDTH = 2
+  @GRID_LINE_WIDTH = .05
+  @MONEY_SIZE = .35
+  @MONEY_BUFFER = .1
+  @MONEY_PADDING = .1
+  @MONEY_UI_HEIGHT = @MONEY_SIZE + @MONEY_BUFFER * 2
 
-  constructor: (canvas, world) ->
-    super world
+  constructor: (canvas, game) ->
+    super game
     @initCanvas_ canvas
     @calculateGridSizeAndPos_()
 
@@ -21,19 +25,25 @@ class HTML5Renderer extends Renderer
 
   calculateGridSizeAndPos_: ->
     @calculateGridSize_()
+    @gridLineWidth_ = @blockSize_ * HTML5Renderer.GRID_LINE_WIDTH
+    @moneySize_ = @blockSize_ * HTML5Renderer.MONEY_SIZE
+    @moneyBuffer_ = @blockSize_ * HTML5Renderer.MONEY_BUFFER
+    @moneyUIHeight_ = @blockSize_ * HTML5Renderer.MONEY_UI_HEIGHT
+    @moneyPadding_ = @blockSize_ * HTML5Renderer.MONEY_PADDING
     @calculateGridPos_()
 
   calculateGridSize_: ->
     idealBlockWidth = @canvas_.getWidth() / @world_.getWidth()
-    idealBlockHeight = @canvas_.getHeight() / @world_.getHeight()
+    idealBlockHeight = @canvas_.getHeight() /
+        (@world_.getHeight() + HTML5Renderer.MONEY_UI_HEIGHT)
     @blockSize_ = Math.min idealBlockWidth, idealBlockHeight
     @input_.setBlockSize @blockSize_
 
   calculateGridPos_: ->
     @gridX_ = ( @canvas_.getWidth() -
         @blockSize_ * @world_.getWidth() ) / 2
-    @gridY_ = ( @canvas_.getHeight() -
-        @blockSize_ * @world_.getHeight() ) / 2
+    @gridY_ = ( @canvas_.getHeight() - @blockSize_ * @world_.getHeight() +
+        @moneyUIHeight_ ) / 2
     @input_.setGridPos x: @gridX_, y: @gridY_
 
   beginRendering: ->
@@ -42,6 +52,7 @@ class HTML5Renderer extends Renderer
   draw_: ->
     @drawBackground_()
     @drawEntities_()
+    @drawMoney_()
 
   drawBackground_: ->
     @canvas_.getContext().fillStyle = '#202020'
@@ -60,9 +71,9 @@ class HTML5Renderer extends Renderer
     @drawGridSquare_ pos, color
 
   drawGridSquare_: (pos, color) ->
-    x = @gridX_ + pos.x * @blockSize_ + HTML5Renderer.GRID_LINE_WIDTH / 2
-    y = @gridY_ + pos.y * @blockSize_ + HTML5Renderer.GRID_LINE_WIDTH / 2
-    size = @blockSize_ - HTML5Renderer.GRID_LINE_WIDTH
+    x = @gridX_ + pos.x * @blockSize_ + @gridLineWidth_ / 2
+    y = @gridY_ + pos.y * @blockSize_ + @gridLineWidth_ / 2
+    size = @blockSize_ - @gridLineWidth_
     @canvas_.getContext().fillStyle = color
     @canvas_.getContext().fillRect x, y, size, size
 
@@ -72,6 +83,14 @@ class HTML5Renderer extends Renderer
       when Entity.Type.Marine then 'darkblue'
       when Entity.Type.Empty then '#404040'
       else 'white'
+
+  drawMoney_: ->
+    return if @game_.getMoney() <= 0
+    y = @moneyBuffer_
+    for i in [0..@game_.getMoney() - 1]
+      x = @gridX_ + i * (@moneySize_ + @moneyPadding_)
+      @canvas_.getContext().fillStyle = '#404040'
+      @canvas_.getContext().fillRect x, y, @moneySize_, @moneySize_
 
   animate_: (dt) ->
     # TODO: animate
