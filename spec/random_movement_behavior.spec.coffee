@@ -1,7 +1,7 @@
-World = require?('../coffee/world.coffee').World
-Entity = require?('../coffee/entity.coffee').Entity
-Knowledge = require?('../coffee/knowledge.coffee').Knowledge
-RandomMovementBehavior = require?('../coffee/random_movement_behavior.coffee').RandomMovementBehavior
+World = require('../coffee/world.coffee').World
+Entity = require('../coffee/entity.coffee').Entity
+Knowledge = require('../coffee/knowledge.coffee').Knowledge
+RandomMovementBehavior = require('../coffee/random_movement_behavior.coffee').RandomMovementBehavior
 
 describe 'Random movement behavior', ->
   behavior = entity = world = undefined

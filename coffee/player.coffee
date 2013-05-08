@@ -1,5 +1,6 @@
 Entity = require('../coffee/entity.coffee').Entity
-RandomMovementBehavior = require?('../coffee/random_movement_behavior.coffee').RandomMovementBehavior
+MoveAndAttackBehavior = require('../coffee/move_and_attack_behavior.coffee').MoveAndAttackBehavior
+SeekMovementBehavior = require('../coffee/seek_movement_behavior.coffee').SeekMovementBehavior
 
 class Player
   constructor: (input) ->
@@ -12,7 +13,10 @@ class Player
     entity = new Entity()
     entity.setPos pos
     entity.setType Entity.Type.Marine
-    entity.setBehavior new RandomMovementBehavior()
+    behavior = new MoveAndAttackBehavior()
+    behavior.setMoveBehavior new SeekMovementBehavior()
+    behavior.setTargetTypes Entity.Type.Wolf
+    entity.setBehavior behavior
     entity.setCost 1
     @game_.addEntity entity
 

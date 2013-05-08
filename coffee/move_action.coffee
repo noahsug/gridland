@@ -6,11 +6,14 @@ class MoveAction extends Action
   setDestination: (destination) ->
     @destination_ = x: destination.x, y: destination.y
 
+  getDestination: ->
+    @destination_
+
   actOn: (world) ->
     throw "destination not defined" unless @destination_?
     if world.isEmpty(@destination_)
-      world.remove @target_
-      @target_.setPos @destination_
-      world.add @target_
+      world.remove @source_
+      @source_.setPos @destination_
+      world.add @source_
 
 exports.MoveAction = MoveAction

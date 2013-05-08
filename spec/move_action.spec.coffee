@@ -14,14 +14,14 @@ describe 'A move action', ->
     moveAction = new MoveAction()
 
   it 'moves an entity to a new position', ->
-    moveAction.setTarget entity
+    moveAction.setSource entity
     moveAction.setDestination x: 2, y: 6
     moveAction.actOn world
 
     expect(entity.getPos()).toEqual x: 2, y: 6
 
   it 'updates the world after an entity moves', ->
-    moveAction.setTarget entity
+    moveAction.setSource entity
     moveAction.setDestination x: 2, y: 6
     moveAction.actOn world
 

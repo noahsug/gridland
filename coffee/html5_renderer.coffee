@@ -80,7 +80,7 @@ class HTML5Renderer extends Renderer
   getEntityColor_: (type) ->
     switch type
       when Entity.Type.Wolf then 'darkred'
-      when Entity.Type.Marine then 'darkblue'
+      when Entity.Type.Marine then 'orange'
       when Entity.Type.Empty then '#404040'
       else 'white'
 

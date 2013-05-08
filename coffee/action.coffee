@@ -1,7 +1,6 @@
 class Action
-  constructor: ->
 
-  setTarget: (@target_) ->
+  setSource: (@source_) ->
 
   actOn: (world) ->
 

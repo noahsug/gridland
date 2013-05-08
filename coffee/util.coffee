@@ -17,4 +17,7 @@ class Util
     throw "min must be <= max, but #{min} > #{max}" if min > max
     Math.floor(Math.random() * (max + 1 - min) + min)
 
+  randElement: (arr) ->
+    return arr[@randInt arr.length - 1]
+
 exports.util = new Util
